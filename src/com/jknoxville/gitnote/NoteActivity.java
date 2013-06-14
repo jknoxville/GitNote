@@ -59,7 +59,7 @@ public class NoteActivity extends FragmentActivity {
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
 			NavUtils.navigateUpTo(this, new Intent(this,
-					NotebookListActivity.class));
+					NoteListActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
