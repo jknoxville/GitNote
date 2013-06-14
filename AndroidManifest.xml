@@ -23,12 +23,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.jknoxville.gitnote.NotebookDetailActivity"
+            android:name="com.jknoxville.gitnote.NoteListActivity"
             android:label="@string/title_notebook_detail"
             android:parentActivityName=".NotebookListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NotebookListActivity" />
+        </activity>
+                <activity
+            android:name="com.jknoxville.gitnote.NoteActivity"
+            android:label="@string/title_note_list_detail"
+            android:parentActivityName=".NoteListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NoteListActivity" />
         </activity>
     </application>
  

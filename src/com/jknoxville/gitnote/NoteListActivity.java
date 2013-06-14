@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 /**
- * An activity representing a list of Notebooks. This activity has different
+ * An activity representing a list of Notes of some notebook. This activity has different
  * presentations for handset and tablet-size devices. On handsets, the activity
  * presents a list of items, which when touched, lead to a
  * {@link NoteActivity} representing item details. On tablets, the
@@ -23,7 +23,7 @@ import android.view.MenuItem;
  * {@link NotebookListFragment.Callbacks} interface to listen for item
  * selections.
  */
-public class NotebookListActivity extends FragmentActivity implements
+public class NoteListActivity extends FragmentActivity implements
 		NotebookListFragment.Callbacks {
 
 	/**
@@ -74,7 +74,7 @@ public class NotebookListActivity extends FragmentActivity implements
 		} else {
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
-			Intent detailIntent = new Intent(this, NoteListActivity.class);
+			Intent detailIntent = new Intent(this, NoteActivity.class);
 			detailIntent.putExtra(NotebookDetailFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}
@@ -83,7 +83,7 @@ public class NotebookListActivity extends FragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_notebook_list, menu);
+		inflater.inflate(R.menu.menu_note_list, menu);
 		return true;
 	}
 	
@@ -91,15 +91,15 @@ public class NotebookListActivity extends FragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//Handle item selection
 		switch (item.getItemId()) {
-		case R.id.new_notebook:
-			newNotebook();
+		case R.id.new_note:
+			newNote();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 	
-	private void newNotebook() {
+	private void newNote() {
 		//TODO add new notebook using name entry dialog
 	}
 }

@@ -10,9 +10,9 @@ import android.widget.TextView;
 import com.jknoxville.gitnote.dummy.DummyContent;
 
 /**
- * A fragment representing a single Notebook detail screen. This fragment is
- * either contained in a {@link NotebookListActivity} in two-pane mode (on
- * tablets) or a {@link NotebookDetailActivity} on handsets.
+ * A fragment representing a single Notebook detail screen. I.e a list of notes contained in this notebook.
+ *  This fragment is either contained in a {@link NotebookListActivity} in two-pane mode (on
+ * tablets) or a {@link NoteActivity} on handsets.
  */
 public class NotebookDetailFragment extends Fragment {
 	/**

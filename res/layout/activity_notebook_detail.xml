@@ -3,5 +3,5 @@
     android:id="@+id/notebook_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotebookDetailActivity"
+    tools:context=".NoteActivity"
     tools:ignore="MergeRootFrame" />

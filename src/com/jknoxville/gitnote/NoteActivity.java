@@ -15,7 +15,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing more than
  * a {@link NotebookDetailFragment}.
  */
-public class NotebookDetailActivity extends FragmentActivity {
+public class NoteActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

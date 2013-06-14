@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">GitNote</string>
-    <string name="title_notebook_detail">Notebook Detail</string>
+    <string name="title_notebook_detail">Example Notebook</string>
+    <string name="title_note_list_detail">Example Note Name</string>
     <string name="new_notebook">New Notebook</string>
+    <string name="new_note">New Note</string>
 
 </resources>
