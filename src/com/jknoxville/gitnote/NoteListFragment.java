@@ -1,5 +1,7 @@
 package com.jknoxville.gitnote;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -7,18 +9,17 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.jknoxville.gitnote.dummy.DummyContent;
-
 /**
  * A list fragment representing a list of Notebooks. This fragment also supports
  * tablet devices by allowing list items to be given an 'activated' state upon
  * selection. This helps indicate which item is currently being viewed in a
- * {@link NotebookDetailFragment}.
+ * {@link NoteFragment}.
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
 public class NoteListFragment extends ListFragment {
+	Filelist list;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -46,7 +47,7 @@ public class NoteListFragment extends ListFragment {
 		/**
 		 * Callback for when an item has been selected.
 		 */
-		public void onItemSelected(String id);
+		public void onItemSelected(String name);
 	}
 
 	/**
@@ -69,11 +70,12 @@ public class NoteListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// TODO: replace with a real list adapter.
-		setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, DummyContent.ITEMS));
+	}
+	
+	@Override
+	public void setArguments(Bundle args) {
+		super.setArguments(args);
+		String thisNotebook = getArguments().getString(NoteFragment.ARG_ITEM_ID);
 	}
 
 	@Override
@@ -116,7 +118,7 @@ public class NoteListFragment extends ListFragment {
 
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+		mCallbacks.onItemSelected(list.ITEMS.get(position).name);
 	}
 
 	@Override
@@ -148,5 +150,13 @@ public class NoteListFragment extends ListFragment {
 		}
 
 		mActivatedPosition = position;
+	}
+	
+	public void populateFiles(File[] files) {
+		list = new Filelist(files);
+		setListAdapter(new ArrayAdapter<Filelist.Item>(getActivity(),
+				android.R.layout.simple_list_item_activated_1,
+				android.R.id.text1, list.ITEMS));
+		
 	}
 }

@@ -1,11 +1,17 @@
 package com.jknoxville.gitnote;
 
+import java.io.File;
+import java.io.IOException;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 /**
  * An activity representing a list of Notebooks. This activity has different
@@ -17,7 +23,7 @@ import android.view.MenuItem;
  * <p>
  * The activity makes heavy use of fragments. The list of items is a
  * {@link NotebookListFragment} and the item details (if present) is a
- * {@link NotebookDetailFragment}.
+ * {@link NoteFragment}.
  * <p>
  * This activity also implements the required
  * {@link NotebookListFragment.Callbacks} interface to listen for item
@@ -50,8 +56,9 @@ public class NotebookListActivity extends FragmentActivity implements
 					.findFragmentById(R.id.notebook_list))
 					.setActivateOnItemClick(true);
 		}
-
-		// TODO: If exposing deep links into your app, handle intents here.
+		
+		showList();
+		
 	}
 
 	/**
@@ -65,8 +72,8 @@ public class NotebookListActivity extends FragmentActivity implements
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putString(NotebookDetailFragment.ARG_ITEM_ID, id);
-			NotebookDetailFragment fragment = new NotebookDetailFragment();
+			arguments.putString(NoteFragment.ARG_ITEM_ID, id);
+			NoteFragment fragment = new NoteFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.notebook_detail_container, fragment).commit();
@@ -75,7 +82,7 @@ public class NotebookListActivity extends FragmentActivity implements
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, NoteListActivity.class);
-			detailIntent.putExtra(NotebookDetailFragment.ARG_ITEM_ID, id);
+			detailIntent.putExtra(NoteFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}
 	}
@@ -92,14 +99,68 @@ public class NotebookListActivity extends FragmentActivity implements
 		//Handle item selection
 		switch (item.getItemId()) {
 		case R.id.new_notebook:
-			newNotebook();
+			promptForNotebookName();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	private void newNotebook(String title) {
+		File file = new File(getFilesDir(), title);
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		showList();
+	}
+	
+	private void promptForNotebookName() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle(R.string.new_notebook_prompt);
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  String value = input.getText().toString();
+		  System.out.println(value);
+		  if(value!=null) {
+			  newNotebook(value);
+		  }
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Cancelled.
+		  }
+		});
+
+		alert.show();
+		// see http://androidsnippets.com/prompt-user-input-with-an-alertdialog
+	}
 	
 	private void newNotebook() {
 		//TODO add new notebook using name entry dialog
+		File file = new File(getFilesDir(), "abcd");
+		System.out.println(file.mkdir());
+		showList();
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		showList();
+	}
+	
+	private void showList() {
+		//Give the fragment a reference to the notebooks directory so it can populate the list
+		((NotebookListFragment) getSupportFragmentManager()
+		.findFragmentById(R.id.notebook_list)).populateFiles((getFilesDir().listFiles()));
 	}
 }
