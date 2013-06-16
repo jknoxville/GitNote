@@ -3,8 +3,9 @@
     <item android:id="@+id/new_notebook"
           android:title="@string/new_notebook"
           android:showAsAction="ifRoom"/>
-    <item android:id="@+id/init"
-          android:title="@string/init"/>
+    <item android:id="@+id/refresh"
+          android:title="@string/refresh"
+          android:showAsAction="ifRoom" />
         <item android:id="@+id/settings"
           android:title="@string/settings"/>
 </menu>

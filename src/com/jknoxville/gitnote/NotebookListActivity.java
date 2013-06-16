@@ -58,6 +58,7 @@ public class NotebookListActivity extends FragmentActivity implements
 					.setActivateOnItemClick(true);
 		}
 		GitManager.initialise(getFilesDir(), PreferenceManager.getDefaultSharedPreferences(this));
+		GitManager.pull();
 		showList();
 		
 	}
@@ -102,8 +103,12 @@ public class NotebookListActivity extends FragmentActivity implements
 		case R.id.new_notebook:
 			promptForNotebookName();
 			return true;
-		case R.id.init:
-			GitManager.initialise(getFilesDir(), PreferenceManager.getDefaultSharedPreferences(this));
+//		case R.id.init:
+//			GitManager.initialise(getFilesDir(), PreferenceManager.getDefaultSharedPreferences(this));
+//			return true;
+		case R.id.refresh:
+			GitManager.pull();
+			showList();
 			return true;
 		case R.id.settings:
 			Intent intent = new Intent(this, SettingsActivity.class);
@@ -117,6 +122,7 @@ public class NotebookListActivity extends FragmentActivity implements
 		File file = new File(getFilesDir(), title);
 		file.mkdir();
 		GitManager.add(file);
+		GitManager.commit(file.getName());
 		showList();
 	}
 	

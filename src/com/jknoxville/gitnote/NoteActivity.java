@@ -128,8 +128,10 @@ public class NoteActivity extends FragmentActivity {
 	}
 	
 	private void saveNote() {
+		boolean changed = false;
 		//if title has been changed, rename the file
 		if(!getNoteTitle().equals(noteFile.getName())) {
+			changed = true;
 			String newPath = noteFile.getAbsolutePath().replace(noteFile.getName(), "") + getNoteTitle();
 			//TODO WARNING the above may rename the directories as well if they have the same name...
 			File newFile = new File(newPath);
@@ -138,11 +140,17 @@ public class NoteActivity extends FragmentActivity {
 			noteFile = newFile;
 			System.out.println("now name is: "+noteFile.getName());
 		}
+		//if body has changed, write out the new body
 		if(!getNoteBody().equals(getContents(noteFile))) {
+			changed = true;
 			System.out.println("contents differ");
 			writeContents(noteFile, getNoteBody());
 		}
-		GitManager.commit(noteFile.getName());
+		//if title or body changed, add file to staging area and commit
+		if(changed) {
+			GitManager.add(noteFile);
+			GitManager.commit(noteFile.getName());
+		}
 		saved = true;
 	}
 	

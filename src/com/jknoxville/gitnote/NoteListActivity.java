@@ -119,6 +119,7 @@ public class NoteListActivity extends FragmentActivity implements
 		try {
 			file.createNewFile();
 			GitManager.add(file);
+			GitManager.commit(file.getName());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
