@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +38,6 @@ public class NotebookListActivity extends FragmentActivity implements
 	 * device.
 	 */
 	private boolean mTwoPane;
-	private GitManager manager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class NotebookListActivity extends FragmentActivity implements
 					.findFragmentById(R.id.notebook_list))
 					.setActivateOnItemClick(true);
 		}
-		
+		GitManager.initialise(getFilesDir(), PreferenceManager.getDefaultSharedPreferences(this));
 		showList();
 		
 	}
@@ -103,20 +103,20 @@ public class NotebookListActivity extends FragmentActivity implements
 			promptForNotebookName();
 			return true;
 		case R.id.init:
-			manager = new GitManager();
-			manager.initialise(getFilesDir());
+			GitManager.initialise(getFilesDir(), PreferenceManager.getDefaultSharedPreferences(this));
+			return true;
+		case R.id.settings:
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 	private void newNotebook(String title) {
 		File file = new File(getFilesDir(), title);
-		try {
-			file.createNewFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		file.mkdir();
+		GitManager.add(file);
 		showList();
 	}
 	
@@ -147,13 +147,6 @@ public class NotebookListActivity extends FragmentActivity implements
 
 		alert.show();
 		// see http://androidsnippets.com/prompt-user-input-with-an-alertdialog
-	}
-	
-	private void newNotebook() {
-		//TODO add new notebook using name entry dialog
-		File file = new File(getFilesDir(), "abcd");
-		System.out.println(file.mkdir());
-		showList();
 	}
 	
 	@Override

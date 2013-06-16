@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -30,13 +31,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NotebookListActivity" />
         </activity>
-                <activity
+        <activity
             android:name="com.jknoxville.gitnote.NoteActivity"
             android:label="@string/title_note_list_detail"
             android:parentActivityName=".NoteListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NoteListActivity" />
+        </activity>
+        <activity
+            android:name="com.jknoxville.gitnote.SettingsActivity"
+            android:label="@string/settings">
         </activity>
     </application>
  

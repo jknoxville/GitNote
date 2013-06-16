@@ -118,6 +118,7 @@ public class NoteListActivity extends FragmentActivity implements
 		File file = new File(getCurrentDir(), title);
 		try {
 			file.createNewFile();
+			GitManager.add(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -161,12 +162,15 @@ public class NoteListActivity extends FragmentActivity implements
 	
 	private File getCurrentDir() {
 		String bookname = getIntent().getStringExtra(NoteFragment.ARG_ITEM_ID);
+		System.out.println("bookname: "+bookname);
 		return getFilesDir().listFiles(new Filter(bookname))[0];
 	}
 	
 	private void showList() {
+		System.out.println("listFiles: "+getCurrentDir().listFiles());
 		//Give the fragment a reference to the notebooks directory so it can populate the list
 		((NoteListFragment) getSupportFragmentManager()
 		.findFragmentById(R.id.note_list)).populateFiles((getCurrentDir().listFiles()));
+		
 	}
 }

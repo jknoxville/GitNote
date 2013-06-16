@@ -5,4 +5,6 @@
           android:showAsAction="ifRoom"/>
     <item android:id="@+id/init"
           android:title="@string/init"/>
+        <item android:id="@+id/settings"
+          android:title="@string/settings"/>
 </menu>
