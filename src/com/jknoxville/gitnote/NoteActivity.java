@@ -142,7 +142,7 @@ public class NoteActivity extends FragmentActivity {
 			System.out.println("contents differ");
 			writeContents(noteFile, getNoteBody());
 		}
-		//TODO git commit
+		GitManager.commit(noteFile.getName());
 		saved = true;
 	}
 	

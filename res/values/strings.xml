@@ -12,5 +12,6 @@
     <string name="history">Note History</string>
     <string name="new_note_prompt">Note Title</string>
     <string name="new_notebook_prompt">Notebook Name</string>
+    <string name="init">Initialise Repo</string>
 
 </resources>

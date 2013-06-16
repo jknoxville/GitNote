@@ -3,4 +3,6 @@
     <item android:id="@+id/new_notebook"
           android:title="@string/new_notebook"
           android:showAsAction="ifRoom"/>
+    <item android:id="@+id/init"
+          android:title="@string/init"/>
 </menu>

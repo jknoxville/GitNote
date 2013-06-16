@@ -37,6 +37,7 @@ public class NotebookListActivity extends FragmentActivity implements
 	 * device.
 	 */
 	private boolean mTwoPane;
+	private GitManager manager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,9 @@ public class NotebookListActivity extends FragmentActivity implements
 		case R.id.new_notebook:
 			promptForNotebookName();
 			return true;
+		case R.id.init:
+			manager = new GitManager();
+			manager.initialise(getFilesDir());
 		default:
 			return super.onOptionsItemSelected(item);
 		}
