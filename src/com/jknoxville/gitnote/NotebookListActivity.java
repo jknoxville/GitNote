@@ -58,7 +58,7 @@ public class NotebookListActivity extends FragmentActivity implements
 					.setActivateOnItemClick(true);
 		}
 		GitManager.initialise(getFilesDir(), PreferenceManager.getDefaultSharedPreferences(this));
-		GitManager.pull();
+		//GitManager.pull();
 		showList();
 		
 	}
@@ -109,6 +109,9 @@ public class NotebookListActivity extends FragmentActivity implements
 		case R.id.refresh:
 			GitManager.pull();
 			showList();
+			return true;
+		case R.id.clone:
+			GitManager.clone(getFilesDir());
 			return true;
 		case R.id.settings:
 			Intent intent = new Intent(this, SettingsActivity.class);

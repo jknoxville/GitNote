@@ -21,6 +21,8 @@ import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
@@ -30,41 +32,93 @@ import android.preference.PreferenceManager;
 public class GitManager {
 
 	static Git git;
+	static Repository lRepo;
 	static UsernamePasswordCredentialsProvider creds;
 	static SharedPreferences sharedPref;
 	static long lastPushFail = 0;
 	static long pushTimeout = 15*60*1000;	//15 mins constant	TODO make it exp backoff
 	static boolean alreadyPushing = false;
 
+	//	public static void initialise(File gitDir, SharedPreferences sharedPref) {
+	//				FileRepositoryBuilder builder = new FileRepositoryBuilder();
+	//				Repository repo = null;
+	//				try {
+	//					repo = builder.setWorkTree(gitDir)
+	//							.readEnvironment()
+	//							.findGitDir()
+	//							.build();
+	//				} catch (IOException e) {
+	//					// TODO Auto-generated catch block
+	//					e.printStackTrace();
+	//				}
+	//				git = new Git(repo);
+	//		GitManager.sharedPref = sharedPref;
+	//		try {
+	//			//git = Git.init().setDirectory(gitDir).call();
+	//			//git  = Git.cloneRepository().setURI("https://jknoxville@bitbucket.org/jknoxville/gitnote-test.git").setCredentialsProvider(creds).call();
+	//			//			FS.detect();
+	//			//			File conf = new File(git.getRepository().getDirectory(), ".gnconfig");
+	//			//			FileBasedConfig config = new FileBasedConfig(conf, FS.DETECTED);
+	//			StoredConfig config = git.getRepository().getConfig();
+	//			config.setString("remote", "origin", "url", "https://jknoxville@bitbucket.org/jknoxville/test2.git");
+	//			config.setString("branch", "master", "merge", "refs/heads/master");
+	//			config.save();
+	//			creds = new UsernamePasswordCredentialsProvider(sharedPref.getString("username", ""), sharedPref.getString("password", ""));
+	//		} catch (IOException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//	}
+	
 	public static void initialise(File gitDir, SharedPreferences sharedPref) {
-		//		FileRepositoryBuilder builder = new FileRepositoryBuilder();
-		//		try {
-		//			repo = builder.setWorkTree(gitDir)
-		//					.readEnvironment()
-		//					.findGitDir()
-		//					.build();
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-		//		git = new Git(repo);
-		GitManager.sharedPref = sharedPref;
 		try {
-			git = Git.init().setDirectory(gitDir).call();
-			//			FS.detect();
-			//			File conf = new File(git.getRepository().getDirectory(), ".gnconfig");
-			//			FileBasedConfig config = new FileBasedConfig(conf, FS.DETECTED);
-			StoredConfig config = git.getRepository().getConfig();
-			config.setString("remote", "origin", "url", "https://jknoxville@bitbucket.org/jknoxville/gitnote-test.git");
-			config.save();
+			GitManager.sharedPref = sharedPref;
 			creds = new UsernamePasswordCredentialsProvider(sharedPref.getString("username", ""), sharedPref.getString("password", ""));
-		} catch (GitAPIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			lRepo = new FileRepository(gitDir+"/.git");
+			git = new Git(lRepo);
+			//clone("https://jknoxville@bitbucket.org/jknoxville/gitnote-test.git", gitDir);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void clone(File gitDir) {
+		clone("https://jknoxville@bitbucket.org/jknoxville/gitnote-test.git", gitDir);
+	}
+	
+	public static void clone(final String uri, final File gitDir) {
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					creds = new UsernamePasswordCredentialsProvider(sharedPref.getString("username", ""), sharedPref.getString("password", ""));
+					Git.cloneRepository()
+					.setURI(uri)
+					.setDirectory(gitDir)
+					.setCredentialsProvider(creds)
+					.call();
+				} catch (NoHeadException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoMessageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (UnmergedPathsException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ConcurrentRefUpdateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (WrongRepositoryStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (GitAPIException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 
 	public static void commit(final String noteName) {
@@ -112,38 +166,33 @@ public class GitManager {
 	public static void push() throws InvalidRemoteException, TransportException, GitAPIException {
 		git.push().setCredentialsProvider(creds).call();
 	}
-	
+
 	public static void pull() {
-		try {
-			git.pull().setCredentialsProvider(creds).call();
-		} catch (WrongRepositoryStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DetachedHeadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidRemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CanceledException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RefNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoHeadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransportException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (GitAPIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					git.pull().setCredentialsProvider(creds).call();
+				} catch (NoHeadException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoMessageException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (UnmergedPathsException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ConcurrentRefUpdateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (WrongRepositoryStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (GitAPIException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 
 	public static void startPushing() {
