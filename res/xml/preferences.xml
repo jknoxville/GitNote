@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
+        android:key="repoURL"
+        android:title="@string/repoURL"
+        android:summary="@string/repoURL_summary"
+        android:defaultValue="" />
+    <EditTextPreference
         android:key="username"
         android:title="@string/username"
         android:summary="@string/username_summary"
@@ -9,5 +14,6 @@
         android:key="password"
         android:title="@string/password"
         android:summary="@string/password_summary"
-        android:defaultValue="" />
+        android:defaultValue=""
+        android:inputType="textPassword" />
 </PreferenceScreen>

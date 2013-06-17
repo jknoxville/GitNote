@@ -118,7 +118,7 @@ public class NoteListActivity extends FragmentActivity implements
 		File file = new File(getCurrentDir(), title);
 		try {
 			file.createNewFile();
-			GitManager.add(file);
+			//GitManager.add(file);	//always does commit -a so this isnt needed
 			GitManager.commit(file.getName());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
