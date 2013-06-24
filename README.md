@@ -9,7 +9,7 @@ The original aim was to provide client side encryption. This has not yet been at
 
 Contributions would be appreciated.
 
-This code is dependent on the following libraries:
+The following libraries are required for compilation:
 * JGit
   http://www.eclipse.org/jgit/
 * JSch
