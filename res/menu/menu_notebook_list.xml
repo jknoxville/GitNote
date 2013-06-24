@@ -5,6 +5,7 @@
           android:showAsAction="ifRoom"/>
     <item android:id="@+id/refresh"
           android:title="@string/refresh"
+          android:icon="@drawable/ic_action_refresh"
           android:showAsAction="ifRoom" />
     <item android:id="@+id/clone"
           android:title="@string/clone"/>
