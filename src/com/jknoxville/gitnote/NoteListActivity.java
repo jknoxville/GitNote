@@ -1,6 +1,7 @@
 package com.jknoxville.gitnote;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import android.app.AlertDialog;
@@ -8,9 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 
 /**
@@ -37,6 +42,14 @@ public class NoteListActivity extends FragmentActivity implements
 	 * device.
 	 */
 	private boolean mTwoPane;
+	private File[] files;
+	private FilenameFilter nonHiddenFilter = new FilenameFilter() {
+		
+		@Override
+		public boolean accept(File dir, String filename) {
+			return !filename.startsWith(".");
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +76,48 @@ public class NoteListActivity extends FragmentActivity implements
 //					getSupportFragmentManager().beginTransaction()
 //							.add(R.id.note_list, fragment).commit();
 				setContentView(R.layout.activity_note_list);
-
+				setTitle(getIntent()
+							.getStringExtra(NoteFragment.ARG_ITEM_ID));
+				registerForContextMenu(((NoteListFragment) getSupportFragmentManager().findFragmentById(R.id.note_list)).getListView());
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch(item.getItemId()) {
+		case R.id.rename:
+			//rename(info.id);
+			return true;
+		case R.id.delete:
+			delete(info.id);
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+	
+	private void delete(long id) {
+		GitManager.remove(files[(int) id]);
+		//delete(files[(int) id]);
+		files[(int) id].delete();
+		GitManager.commit(Strings.noteDel+files[(int) id].getName());
+		showList();
+	}
+	
+	private void delete(File f) {
+		if(!f.delete()) {
+			for(File child: f.listFiles()) {
+				delete(child);
+			}
+		}
+		f.delete();
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.note_context, menu);
 	}
 
 	/**
@@ -119,7 +173,7 @@ public class NoteListActivity extends FragmentActivity implements
 		try {
 			file.createNewFile();
 			//GitManager.add(file);	//always does commit -a so this isnt needed
-			GitManager.commit(file.getName());
+			GitManager.commit(Strings.newNote+file.getName());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,7 +222,7 @@ public class NoteListActivity extends FragmentActivity implements
 	}
 	
 	private void showList() {
-		System.out.println("listFiles: "+getCurrentDir().listFiles());
+		files = getCurrentDir().listFiles(nonHiddenFilter);
 		//Give the fragment a reference to the notebooks directory so it can populate the list
 		((NoteListFragment) getSupportFragmentManager()
 		.findFragmentById(R.id.note_list)).populateFiles((getCurrentDir().listFiles()));

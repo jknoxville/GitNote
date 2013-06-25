@@ -48,21 +48,11 @@ public class NoteActivity extends FragmentActivity {
 		// http://developer.android.com/guide/components/fragments.html
 		//
 		if (savedInstanceState == null) {
-//			// Create the detail fragment and add it to the activity
-//			// using a fragment transaction.
-//			Bundle arguments = new Bundle();
-//			arguments.putString(NoteFragment.ARG_ITEM_ID, getIntent()
-//					.getStringExtra(NoteFragment.ARG_ITEM_ID));
-//			NoteFragment fragment = new NoteFragment();
-//			fragment.setArguments(arguments);
-//			getSupportFragmentManager().beginTransaction()
-//					.add(R.id.note_container, fragment).commit();
 			noteFile = new File(getIntent().getStringExtra(NoteFragment.ARG_ITEM_ID));
 		}
-		System.out.println(findViewById(R.id.title));
-//		System.out.println(findViewById(R.id.note_container).findViewById(R.id.title));
 		((EditText) findViewById(R.id.title)).setText(noteFile.getName());
 		((EditText) findViewById(R.id.body)).setText(getContents(noteFile));
+		setTitle(noteFile.getName());
 	}
 	
 	private String getNoteTitle() {
@@ -149,7 +139,7 @@ public class NoteActivity extends FragmentActivity {
 		//if title or body changed, add file to staging area and commit
 		if(changed) {
 			GitManager.add(noteFile);
-			GitManager.commit(noteFile.getName());
+			GitManager.commit(Strings.noteEdit+noteFile.getName());
 		}
 		saved = true;
 	}

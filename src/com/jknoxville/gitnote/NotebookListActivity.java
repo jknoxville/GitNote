@@ -93,7 +93,7 @@ public class NotebookListActivity extends FragmentActivity implements
 	private void delete(long id) {
 		GitManager.remove(files[(int) id]);
 		delete(files[(int) id]);
-		GitManager.commit(files[(int) id].getName());
+		GitManager.commit(Strings.notebookDel+files[(int) id].getName());
 		showList();
 	}
 	
@@ -175,7 +175,7 @@ public class NotebookListActivity extends FragmentActivity implements
 		File file = new File(getFilesDir(), title);
 		file.mkdir();
 		//GitManager.add(file);	//always does commit -a so this isnt needed
-		GitManager.commit(file.getName());
+		GitManager.commit(Strings.newNotebook+file.getName());
 		showList();
 	}
 	
