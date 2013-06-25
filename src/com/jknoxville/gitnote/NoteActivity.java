@@ -7,10 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,8 @@ public class NoteActivity extends FragmentActivity {
 		setContentView(R.layout.activity_note);
 
 		// Show the Up button in the action bar.
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(false);
+		getActionBar().setHomeButtonEnabled(false);
 
 		// savedInstanceState is non-null when there is fragment state
 		// saved from previous configurations of this activity
@@ -96,17 +98,19 @@ public class NoteActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+//		case android.R.id.home:
+//			// This ID represents the Home or Up button. In the case of this
+//			// activity, the Up button is shown. Use NavUtils to allow users
+//			// to navigate up one level in the application structure. For
+//			// more details, see the Navigation pattern on Android Design:
+//			//
+//			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+//			//
+//			NavUtils.navigateUpTo(this, new Intent(this,
+//					NoteListActivity.class));
+//			return true;
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpTo(this, new Intent(this,
-					NoteListActivity.class));
-			return true;
+	        return false;
 		case com.jknoxville.gitnote.R.id.save:
 			saveNote();
 			return true;
@@ -115,6 +119,52 @@ public class NoteActivity extends FragmentActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if(!noteHasChanged()) {
+			this.finish();
+		} else {
+			confirmUnsavedExit();
+		}
+	}
+	
+	private void confirmUnsavedExit() {
+		final Activity a = this;
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Confirm Exit")
+		.setMessage("There are unsaved changes, are you sure you want to exit?")
+		.setPositiveButton("Save Changes", new DialogInterface.OnClickListener() {
+           public void onClick(DialogInterface dialog, int id) {
+               saveNote();
+               a.finish();
+           }
+       })
+       .setNegativeButton("Discard Changes", new DialogInterface.OnClickListener() {
+           public void onClick(DialogInterface dialog, int id) {
+               a.finish();
+           }
+       })
+       .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+           public void onClick(DialogInterface dialog, int id) {
+           }
+       });
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	private boolean noteHasChanged() {
+		boolean changed = false;
+		//if title has been changed
+		if(!getNoteTitle().equals(noteFile.getName())) {
+			changed = true;
+		}
+		//if body has changed
+		if(!getNoteBody().equals(getContents(noteFile))) {
+			changed = true;
+		}
+		return changed;
 	}
 	
 	private void saveNote() {
