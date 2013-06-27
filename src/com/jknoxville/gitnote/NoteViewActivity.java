@@ -1,7 +1,9 @@
 package com.jknoxville.gitnote;
 
+import java.io.File;
 import java.util.Locale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -33,6 +35,7 @@ public class NoteViewActivity extends FragmentActivity {
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+	File noteFile;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,11 @@ public class NoteViewActivity extends FragmentActivity {
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+		
+		if (savedInstanceState == null) {
+			noteFile = new File(getIntent().getStringExtra(NoteFragment.ARG_ITEM_ID));
+		}
+		setTitle(noteFile.getName());
 
 	}
 
@@ -55,6 +63,18 @@ public class NoteViewActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.note_view, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch(menuItem.getItemId()) {
+		case R.id.edit:
+			Intent intent = new Intent(this, NoteActivity.class);
+			intent.putExtra(NoteFragment.ARG_ITEM_ID, getIntent().getExtras().getString(NoteFragment.ARG_ITEM_ID));
+			startActivity(intent);
+		}
+		return super.onContextItemSelected(menuItem);
+		
 	}
 
 	/**
@@ -72,11 +92,15 @@ public class NoteViewActivity extends FragmentActivity {
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
-			Fragment fragment = new DummySectionFragment();
+			Fragment fragment = new TextFragment();
 			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+			args.putString(TextFragment.ARG_SECTION_NUMBER, getNote(position));
 			fragment.setArguments(args);
 			return fragment;
+		}
+		
+		private String getNote(int pos) {
+			return GitManager.getNote(noteFile, pos);
 		}
 
 		@Override
@@ -104,14 +128,14 @@ public class NoteViewActivity extends FragmentActivity {
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
 	 */
-	public static class DummySectionFragment extends Fragment {
+	public static class TextFragment extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
-		public DummySectionFragment() {
+		public TextFragment() {
 		}
 
 		@Override
@@ -121,8 +145,8 @@ public class NoteViewActivity extends FragmentActivity {
 					container, false);
 			TextView dummyTextView = (TextView) rootView
 					.findViewById(R.id.section_label);
-			dummyTextView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
+			dummyTextView.setText(getArguments().getString(
+					ARG_SECTION_NUMBER));
 			return rootView;
 		}
 	}

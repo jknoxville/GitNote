@@ -6,6 +6,7 @@
     <string name="title_note_list_detail">Example Note Name</string>
     <string name="new_notebook">New Notebook</string>
     <string name="new_note">New Note</string>
+    <string name="edit_note">Edit Note</string>
     <string name="title">Title</string>
     <string name="note">Note text</string>
     <string name="save">Save</string>
