@@ -6,8 +6,14 @@ Notes app for android backed by Git repositories
 Project started 14th June 2013.
 
 - [x] Basic Navigation and synchronisation
-- [ ] View note history
+- [-] View note history
 - [ ] Encryption
+
+[x] : complete
+[-] : incomplete
+[ ] : not started
+
+__________
 
 Contributions would be appreciated.
 
