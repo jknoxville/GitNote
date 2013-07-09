@@ -154,7 +154,7 @@ public class NoteListActivity extends FragmentActivity implements
 			
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
-			Intent detailIntent = new Intent(this, NoteViewActivity.class);
+			Intent detailIntent = new Intent(this, NoteActivity.class);	//TODO change to NoteViewActivity
 			//use getCurrecntDir() and id to locate file object, then get absolute path and put this in intent.
 			//so that the next activity can load up that file.
 			File selectedFile = getCurrentDir().listFiles(new Filter(id))[0];

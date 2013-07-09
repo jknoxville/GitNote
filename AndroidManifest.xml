@@ -34,8 +34,7 @@
         </activity>
         <activity
             android:name="com.jknoxville.gitnote.NoteActivity"
-            android:label="@string/title_note_list_detail"
-            android:parentActivityName=".NoteListActivity" >
+            android:label="@string/title_note_list_detail">
         </activity>
         <activity
             android:name="com.jknoxville.gitnote.SettingsActivity"
