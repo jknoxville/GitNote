@@ -138,9 +138,23 @@ public class NoteListActivity extends FragmentActivity implements
 					.replace(R.id.notebook_detail_container, fragment).commit();
 
 		} else {
+			
+			//straight to editing view
+			
+//			// In single-pane mode, simply start the detail activity
+//			// for the selected item ID.
+//			Intent detailIntent = new Intent(this, NoteActivity.class);
+//			//use getCurrecntDir() and id to locate file object, then get absolute path and put this in intent.
+//			//so that the next activity can load up that file.
+//			File selectedFile = getCurrentDir().listFiles(new Filter(id))[0];
+//			detailIntent.putExtra(NoteFragment.ARG_ITEM_ID, selectedFile.getAbsolutePath());
+//			startActivity(detailIntent);
+			
+			//to noteView
+			
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
-			Intent detailIntent = new Intent(this, NoteActivity.class);
+			Intent detailIntent = new Intent(this, NoteActivity.class);	//TODO change to NoteViewActivity
 			//use getCurrecntDir() and id to locate file object, then get absolute path and put this in intent.
 			//so that the next activity can load up that file.
 			File selectedFile = getCurrentDir().listFiles(new Filter(id))[0];

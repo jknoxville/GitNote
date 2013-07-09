@@ -6,6 +6,7 @@
     <string name="title_note_list_detail">Example Note Name</string>
     <string name="new_notebook">New Notebook</string>
     <string name="new_note">New Note</string>
+    <string name="edit_note">Edit Note</string>
     <string name="title">Title</string>
     <string name="note">Note text</string>
     <string name="save">Save</string>
@@ -16,15 +17,18 @@
     <string name="settings">Settings</string>
     <string name="refresh">Refresh</string>
     <string name="clone">Clone Existing Repository</string>
-    
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="repoURL">Repository URL</string>
     <string name="username_summary">Username for remote repository</string>
     <string name="password_summary">Password for remote repository</string>
     <string name="repoURL_summary">Address of remote repository</string>
-    
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
+    <string name="title_activity_note_view">NoteViewActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
 
 </resources>
