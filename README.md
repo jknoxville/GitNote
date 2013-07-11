@@ -3,7 +3,7 @@ GitNote
 
 Notes app for android backed by Git repositories
 
-Project started 14th June 2013.
+Mostly hacked together one weekend on 14th June 2013, with slight additions since then.
 
 - [x] Basic Navigation and synchronisation
 - [-] View note history
@@ -15,7 +15,7 @@ Project started 14th June 2013.
 
 __________
 
-Contributions would be appreciated.
+I don't expect to do much more on this in the foreseeable future, so any contributions would be very much appreciated.
 
 The following libraries are required for compilation:
 * JGit
